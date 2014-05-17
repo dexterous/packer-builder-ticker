@@ -32,8 +32,9 @@ In it's simplest form, all you need to do is declare a builder of type `ticker`.
 ### Configuration Reference
 The builder has two configuration options, both optional.
 
-1. `period` (int): the period of one notification; i.e., the builder will publish one notification every `period` seconds
-1. `duration` (int): the duration for which the builder will run in seconds
+1. `period` (int): the period of one notification; i.e., the builder will publish one notification every `period`
+    seconds [default: 1]
+1. `duration` (int): the duration for which the builder will run in seconds [default: 5]
 
 ### Example with configuration options
 A configuration as below...
