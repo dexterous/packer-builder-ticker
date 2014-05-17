@@ -48,21 +48,18 @@ func (b *Builder) Run(ui packer.Ui, _ packer.Hook, _ packer.Cache) (packer.Artif
 	stop := time.After(time.Duration(b.config.duration) * time.Second)
 	start := time.Now()
 
-Loop:
-	for {
+	for !b.done {
 		select {
 		case now := <-tick:
 			ui.Say(fmt.Sprintf("Building... %s", now.Sub(start)))
 		case <-stop:
 			ui.Say("Done! Stopping...")
-			break Loop
+			b.done = true
 		case <-b.cancel:
 			ui.Say("Cancelled! Stopping...")
-			break Loop
+			b.done = true
 		}
 	}
-
-	b.done = true
 
 	return nil, nil
 }
