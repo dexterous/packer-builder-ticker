@@ -50,8 +50,8 @@ func (b *Builder) Run(ui packer.Ui, _ packer.Hook, _ packer.Cache) (packer.Artif
 
 	for !b.done {
 		select {
-		case now := <-tick:
-			ui.Say(fmt.Sprintf("Building... %s", now.Sub(start)))
+		case <-tick:
+			ui.Say(fmt.Sprintf("Building... %s", time.Since(start)))
 		case <-stop:
 			ui.Say("Done! Stopping...")
 			b.done = true
