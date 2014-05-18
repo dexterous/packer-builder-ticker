@@ -34,7 +34,7 @@ func (b *Builder) Prepare(raws ...interface{}) ([]string, error) {
 		}
 	}
 
-	b.cancel = make(chan int)
+	b.cancel = make(chan int, 1)
 
 	return nil, nil
 }
