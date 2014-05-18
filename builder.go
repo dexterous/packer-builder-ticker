@@ -61,6 +61,7 @@ func (b *Builder) Run(ui packer.Ui, _ packer.Hook, _ packer.Cache) (packer.Artif
 		}
 	}
 
+	ui.Say("Stopped!")
 	return nil, nil
 }
 
