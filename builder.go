@@ -14,8 +14,8 @@ type Builder struct {
 }
 
 type config struct {
-	period   float64
-	duration float64
+	period   uint
+	duration uint
 }
 
 func (b *Builder) Prepare(raws ...interface{}) ([]string, error) {
@@ -26,11 +26,11 @@ func (b *Builder) Prepare(raws ...interface{}) ([]string, error) {
 		var m map[string]interface{} = *e.(*map[string]interface{})
 
 		if v, ok := m["period"]; ok {
-			b.config.period = v.(float64)
+			b.config.period = uint(v.(float64))
 		}
 
 		if v, ok := m["duration"]; ok {
-			b.config.duration = v.(float64)
+			b.config.duration = uint(v.(float64))
 		}
 	}
 
@@ -40,7 +40,7 @@ func (b *Builder) Prepare(raws ...interface{}) ([]string, error) {
 }
 
 func (b *Builder) Run(ui packer.Ui, _ packer.Hook, _ packer.Cache) (packer.Artifact, error) {
-	ui.Say(fmt.Sprintf("Running(%3.0f, %3.0f)...", b.config.period, b.config.duration))
+	ui.Say(fmt.Sprintf("Running(%d, %d)...", b.config.period, b.config.duration))
 
 	b.ui = ui
 
@@ -51,7 +51,7 @@ func (b *Builder) Run(ui packer.Ui, _ packer.Hook, _ packer.Cache) (packer.Artif
 	for !b.done {
 		select {
 		case <-tick:
-			ui.Say(fmt.Sprintf("Building... %s", time.Since(start)))
+			ui.Say(fmt.Sprintf("Building... %d", uint(time.Since(start).Seconds())))
 		case <-stop:
 			ui.Say("Done! Stopping...")
 			b.done = true
