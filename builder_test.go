@@ -8,6 +8,7 @@ import (
 )
 
 func TestBuilder_ImplementsBuilder(t *testing.T) {
+  t.Parallel()
 	var raw interface{} = &Builder{}
 
 	if _, ok := raw.(packer.Builder); !ok {
@@ -16,6 +17,7 @@ func TestBuilder_ImplementsBuilder(t *testing.T) {
 }
 
 func TestBuilder_Prepare_DefaultsConfig(t *testing.T) {
+  t.Parallel()
 	var builder Builder
 
 	builder.Prepare()
@@ -30,6 +32,7 @@ func TestBuilder_Prepare_DefaultsConfig(t *testing.T) {
 }
 
 func TestBuilder_Prepare_SetsConfig(t *testing.T) {
+  t.Parallel()
 	var builder Builder
 
 	builder.Prepare(&map[string]interface{}{
@@ -47,6 +50,7 @@ func TestBuilder_Prepare_SetsConfig(t *testing.T) {
 }
 
 func TestBuilder_Run_SaysRunning(t *testing.T) {
+  t.Parallel()
 	var builder Builder
 	var ui = newTestUi(t)
 
@@ -62,6 +66,7 @@ func TestBuilder_Run_SaysRunning(t *testing.T) {
 }
 
 func TestBuilder_Cancel_SaysCancelling(t *testing.T) {
+  t.Parallel()
 	var builder Builder
 	var ui = newTestUi(t)
 	var semaphore = make(chan int, 1)
@@ -85,6 +90,7 @@ func TestBuilder_Cancel_SaysCancelling(t *testing.T) {
 }
 
 func TestBuilder_Cancel_DoesNotSayCancellingIfDone(t *testing.T) {
+  t.Parallel()
 	var builder Builder
 	var ui = newTestUi(t)
 
