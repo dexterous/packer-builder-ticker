@@ -40,7 +40,7 @@ func (b *Builder) Prepare(raws ...interface{}) ([]string, error) {
 }
 
 func (b *Builder) Run(ui packer.Ui, _ packer.Hook, _ packer.Cache) (packer.Artifact, error) {
-	ui.Say(fmt.Sprintf("Running(%d, %d)...", b.config.period, b.config.duration))
+	ui.Say(fmt.Sprintf("Running for %d second(s), ticking every %d second(s)...", b.config.duration, b.config.period))
 
 	b.ui = ui
 
