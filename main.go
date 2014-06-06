@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/dexterous/packer-builder-ticker/builder"
 	"github.com/mitchellh/packer/packer/plugin"
 )
 
@@ -9,6 +10,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	server.RegisterBuilder(new(Builder))
+	server.RegisterBuilder(new(builder.Builder))
 	server.Serve()
 }
