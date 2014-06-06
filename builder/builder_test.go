@@ -53,15 +53,15 @@ func TestBuilder_Run_SaysRunning(t *testing.T) {
 	var builder Builder
 	var ui = newTestUi(t)
 
-	ui.ShouldSay("Running for 2 second(s), ticking every 1 second(s)...")
-	ui.ShouldSay("Building... 1")
-	ui.ShouldSay("Done! Stopping...")
-	ui.ShouldSay("Stopped!")
+	ui.shouldSay("Running for 2 second(s), ticking every 1 second(s)...")
+	ui.shouldSay("Building... 1")
+	ui.shouldSay("Done! Stopping...")
+	ui.shouldSay("Stopped!")
 
 	builder.Prepare(&map[string]interface{}{"duration": float64(2)})
 	builder.Run(&ui, nil, nil)
 
-	ui.Verify()
+	ui.verify()
 }
 
 func TestBuilder_Cancel_SaysCancelling(t *testing.T) {
@@ -70,11 +70,11 @@ func TestBuilder_Cancel_SaysCancelling(t *testing.T) {
 	var ui = newTestUi(t)
 	var semaphore = make(chan int, 1)
 
-	ui.ShouldSay("Running for 5 second(s), ticking every 1 second(s)...")
-	ui.ShouldSay("Building... 1")
-	ui.ShouldSay("Cancelling...")
-	ui.ShouldSay("Cancelled! Stopping...")
-	ui.ShouldSay("Stopped!")
+	ui.shouldSay("Running for 5 second(s), ticking every 1 second(s)...")
+	ui.shouldSay("Building... 1")
+	ui.shouldSay("Cancelling...")
+	ui.shouldSay("Cancelled! Stopping...")
+	ui.shouldSay("Stopped!")
 
 	builder.Prepare(&map[string]interface{}{"duration": float64(5)})
 	go func() {
@@ -85,7 +85,7 @@ func TestBuilder_Cancel_SaysCancelling(t *testing.T) {
 	time.AfterFunc(1*time.Second+1*time.Millisecond, builder.Cancel)
 	<-semaphore
 
-	ui.Verify()
+	ui.verify()
 }
 
 func TestBuilder_Cancel_DoesNotSayCancellingIfDone(t *testing.T) {
@@ -93,17 +93,17 @@ func TestBuilder_Cancel_DoesNotSayCancellingIfDone(t *testing.T) {
 	var builder Builder
 	var ui = newTestUi(t)
 
-	ui.ShouldSay("Running for 2 second(s), ticking every 1 second(s)...")
-	ui.ShouldSay("Building... 1")
-	ui.ShouldSay("Done! Stopping...")
-	ui.ShouldSay("Stopped!")
-	ui.ShouldNotSay("Cancelling...")
-	ui.ShouldNotSay("Cancelled! Stopping...")
+	ui.shouldSay("Running for 2 second(s), ticking every 1 second(s)...")
+	ui.shouldSay("Building... 1")
+	ui.shouldSay("Done! Stopping...")
+	ui.shouldSay("Stopped!")
+	ui.shouldNotSay("Cancelling...")
+	ui.shouldNotSay("Cancelled! Stopping...")
 
 	builder.Prepare(&map[string]interface{}{"duration": float64(2)})
 	builder.Run(&ui, nil, nil)
 
 	builder.Cancel()
 
-	ui.Verify()
+	ui.verify()
 }

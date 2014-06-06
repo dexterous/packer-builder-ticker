@@ -52,15 +52,15 @@ func (u *TestUi) Say(actual string) {
 	}
 }
 
-func (u *TestUi) ShouldSay(said string) {
+func (u *TestUi) shouldSay(said string) {
 	u.conversation[said] = &result{expected: true}
 }
 
-func (u *TestUi) ShouldNotSay(said string) {
+func (u *TestUi) shouldNotSay(said string) {
 	u.conversation[said] = &result{expected: false}
 }
 
-func (u *TestUi) Verify() {
+func (u *TestUi) verify() {
 	for expected, result := range u.conversation {
 		u.Logf("Verifying '%s' %s", expected, result)
 		if result.invalid() {
