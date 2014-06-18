@@ -8,11 +8,7 @@ import (
 
 func TestBuilder_ImplementsBuilder(t *testing.T) {
 	t.Parallel()
-	var raw interface{} = &Builder{}
-
-	if _, ok := raw.(packer.Builder); !ok {
-		t.Error("must implement Builder")
-	}
+	expec(t)(new(Builder)).to(be(instanceOf(new(packer.Builder))))
 }
 
 func TestBuilder_Prepare_DefaultsConfig(t *testing.T) {
