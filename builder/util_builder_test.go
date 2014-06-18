@@ -1,70 +1,36 @@
 package builder
 
 import (
-	"fmt"
 	"github.com/mitchellh/packer/packer"
 	"testing"
 )
 
-type result struct {
-	found    bool
-	expected bool
-}
-
-func (r *result) invalid() bool {
-	return (r.expected && !r.found) || (!r.expected && r.found)
-}
-
-func (r *result) foundString() string {
-	if r.found {
-		return "was said"
-	} else {
-		return "was not said"
-	}
-}
-
-func (r *result) expectedString() string {
-	if r.expected {
-		return "should be said"
-	} else {
-		return "should not be said"
-	}
-}
-
-func (r *result) String() string {
-	return fmt.Sprintf("%s, %s", r.expectedString(), r.foundString())
-}
-
 type TestUi struct {
-	conversation map[string]*result
+	conversation map[string]bool
 	*testing.T
 	packer.Ui
 }
 
 func newTestUi(t *testing.T) TestUi {
-	return TestUi{T: t, conversation: map[string]*result{}}
+	return TestUi{T: t, conversation: map[string]bool{}}
 }
 
 func (u *TestUi) Say(actual string) {
 	u.Logf("Said %s", actual)
-	if result, present := u.conversation[actual]; present && !result.found {
-		result.found = true
-	}
+	u.conversation[actual] = true
 }
 
-func (u *TestUi) shouldSay(said string) {
-	u.conversation[said] = &result{expected: true}
+func (u *TestUi) shouldHaveSaid(dialog string) {
+	u.verify(dialog, true, "should be said, but was not said")
 }
 
-func (u *TestUi) shouldNotSay(said string) {
-	u.conversation[said] = &result{expected: false}
+func (u *TestUi) shouldNotHaveSaid(dialog string) {
+	u.verify(dialog, false, "should not be said, but was said")
 }
 
-func (u *TestUi) verify() {
-	for expected, result := range u.conversation {
-		u.Logf("Verifying '%s' %s", expected, result)
-		if result.invalid() {
-			u.Errorf("'%s' %s", expected, result)
-		}
+func (u *TestUi) verify(dialog string, expected bool, message string) {
+	u.Logf("Verifying '%s'", dialog)
+	if u.conversation[dialog] != expected {
+		u.Errorf("'%s' %s", dialog, message)
 	}
 }
