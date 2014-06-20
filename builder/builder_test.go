@@ -69,13 +69,14 @@ func TestBuilder_Cancel_SaysCancelling(t *testing.T) {
 	var semaphore = make(chan int, 1)
 
 	builder.Prepare(&map[string]interface{}{"duration": float64(5)})
+	semaphore <- 1
 	go func() {
 		builder.Run(&ui, nil, nil)
-		semaphore <- 1
+		<-semaphore
 	}()
 
 	time.AfterFunc(1*time.Second+1*time.Millisecond, builder.Cancel)
-	<-semaphore
+	semaphore <- 1
 
 	ui.shouldHaveSaid("Running for 5 second(s), ticking every 1 second(s)...")
 	ui.shouldHaveSaid("Building... 1")
