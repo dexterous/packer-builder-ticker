@@ -1,6 +1,7 @@
 package builder
 
 import (
+	"github.com/dexterous/semaphore"
 	"github.com/mitchellh/packer/packer"
 	"testing"
 	"time"
@@ -66,17 +67,17 @@ func TestBuilder_Cancel_SaysCancelling(t *testing.T) {
 	t.Parallel()
 	var builder Builder
 	var ui = newTestUi(t)
-	var semaphore = make(chan int, 1)
+	var semaphore = semaphore.NewSemaphore()
 
 	builder.Prepare(&map[string]interface{}{"duration": float64(5)})
-	semaphore <- 1
+	semaphore.Acquire()
 	go func() {
 		builder.Run(&ui, nil, nil)
-		<-semaphore
+		semaphore.Release()
 	}()
 
 	time.AfterFunc(1*time.Second+1*time.Millisecond, builder.Cancel)
-	semaphore <- 1
+	semaphore.Acquire()
 
 	ui.shouldHaveSaid("Running for 5 second(s), ticking every 1 second(s)...")
 	ui.shouldHaveSaid("Building... 1")
