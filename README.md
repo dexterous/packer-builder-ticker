@@ -1,3 +1,4 @@
+[![baby-gopher](https://raw.github.com/drnic/babygopher-site/gh-pages/images/babygopher-badge.png)](http://www.babygopher.org)
 # Packer Ticker Builder
 This is a [packer](packer.io) `builder` that I threw together to try out the plugin API.
 It doesn't build any artifacts. It just spits out periodic, ficticious progress updates for a given duration.
